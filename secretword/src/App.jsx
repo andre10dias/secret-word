@@ -1,9 +1,10 @@
 import './App.css'
+import StartScreen from './componensts/StartScreen'
 
 function App() {
   return (
     <div className="app">
-      <h2>Palavra Secreta</h2>
+      <StartScreen />
     </div>
   )
 }
