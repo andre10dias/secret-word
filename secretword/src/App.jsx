@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import './App.css'
 import StartScreen from './componensts/StartScreen'
 import Game from './componensts/Game'
@@ -11,6 +11,8 @@ const stages = [
   { id: 3, name: 'end' }
 ];
 
+const guessesQty = 3;
+
 function App() {
   const [gameStage, setGameStage] = useState(stages[0].name);
   const [words] = useState(wordsList);
@@ -21,7 +23,7 @@ function App() {
 
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
-  const [guesses, setGuesses] = useState(3);
+  const [guesses, setGuesses] = useState(guessesQty);
   const [score, setScore] = useState(0);
 
   const pickedWordAndCategory = () => {
@@ -83,8 +85,24 @@ function App() {
     }
   }
 
+  const clearLetterStates = () => {
+    setGuessedLetters([]);
+    setWrongLetters([]);
+  }
+
+  useEffect(() => {
+    if (guesses <= 0) {
+      // Reinicia todos os estados
+      clearLetterStates();
+      setGameStage(stages[2].name);
+    }
+  }, [guesses]);
+
   // Recomeça o jogo
   const retry = () => {
+    setScore(0);
+    setGuesses(guessesQty);
+    clearLetterStates();
     setGameStage(stages[0].name);
   }
   
