@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { use, useCallback, useEffect, useState } from 'react'
 import './App.css'
 import StartScreen from './componensts/StartScreen'
 import Game from './componensts/Game'
@@ -26,7 +26,7 @@ function App() {
   const [guesses, setGuesses] = useState(guessesQty);
   const [score, setScore] = useState(0);
 
-  const pickedWordAndCategory = () => {
+  const pickedWordAndCategory = useCallback(() => {
     // Escolhe uma categoria aleatória
     const categories = Object.keys(words);
     const category = 
@@ -39,10 +39,11 @@ function App() {
     // console.log(category);  
     // console.log(word);
     return { word, category };
-  }
+  }, [words]);
 
   // Inicia palavra secreta do jogo
-  const startGame = () => {
+  const startGame = useCallback(() => {
+    clearLetterStates();
     const { word, category } = pickedWordAndCategory();
     
     // Cria um array de letras
@@ -55,7 +56,7 @@ function App() {
     setLetters(wordLetters);
     
     setGameStage(stages[1].name);
-  }
+  }, [pickedWordAndCategory]);
 
   // Processa a entrada das letras
   const verifyLetter = (letter) => {
@@ -90,6 +91,7 @@ function App() {
     setWrongLetters([]);
   }
 
+  // Checa se o jogo acabou
   useEffect(() => {
     if (guesses <= 0) {
       // Reinicia todos os estados
@@ -97,6 +99,32 @@ function App() {
       setGameStage(stages[2].name);
     }
   }, [guesses]);
+
+  // Checa condição de vitória
+  useEffect(() => {
+    const uniqueLetters = [...new Set(letters)];
+
+    // Condição de vitória
+    if (guessedLetters.length === uniqueLetters.length && gameStage === 'game') {
+      // Adiciona pontos
+      setScore((actualScore) => actualScore += 100);
+
+      // Reinicia o jogo com uma nova palavra
+      startGame();
+    }
+  }, [guessedLetters, letters, startGame, gameStage]);
+
+  useEffect(() => {
+    const uniqueLetters = [...new Set(letters)];
+    
+    // Verifica se todas as letras foram adivinhadas
+    if (guessedLetters.length === uniqueLetters.length && gameStage === 'game') {
+      // Adiciona pontos
+      setScore((actualScore) => actualScore += 100);
+      // Reinicia o jogo com uma nova palavra
+      startGame();
+    }
+  }, [guessedLetters, letters, startGame, gameStage]);
 
   // Recomeça o jogo
   const retry = () => {
@@ -121,7 +149,12 @@ function App() {
           score={score} 
         />
       )}
-      {gameStage === 'end' && <GameOver retry={retry} />}
+      {gameStage === 'end' && 
+        <GameOver 
+          retry={retry} 
+          score={score} 
+        />
+      }
     </div>
   )
 }
