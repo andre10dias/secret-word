@@ -1,0 +1,37 @@
+.start h1 {
+    font-size: 3rem;
+    letter-spacing: -1px;
+    font-weight: 700;
+    margin: 0 0 0.6rem 0;
+}
+
+.start h1 {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.start p {
+    margin-bottom: 2rem;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.start button {
+    display: inline-block;
+}
+
+.start {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap: 18px;
+}
+
+.start p { max-width: 700px; }
+
+.start button {
+    padding: 12px 28px;
+    font-size: 1rem;
+    border-radius: 10px;
+}

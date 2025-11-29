@@ -3,4 +3,15 @@
   text-align: center;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
+  padding: 28px;
+}
+
+.app > * {
+  width: min(900px, 96%);
+  background: var(--card);
+  padding: 36px;
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(2,6,23,0.6);
+  backdrop-filter: blur(6px);
 }
